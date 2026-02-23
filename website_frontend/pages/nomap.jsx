@@ -745,16 +745,16 @@ const straightRoutes = useMemo(() => {
             <div className="space-y-2 text-sm">
               <div className="flex justify-between">
                 <span className="text-[#616161]">Baseline</span>
-                <span className="font-medium">${baselineTotal.toFixed(2)}</span>
+                <span className="font-medium">₹{baselineTotal.toFixed(2)}</span>
               </div>
               <div className="flex justify-between">
                 <span className="text-[#616161]">Optimized</span>
-                <span className="font-medium">${optimizedTotal.toFixed(2)}</span>
+                <span className="font-medium">₹{optimizedTotal.toFixed(2)}</span>
               </div>
               <div className="flex justify-between pt-2 border-t border-[#eee]">
                 <span className="text-[#616161]">Savings</span>
                 <span className="font-semibold" style={{ color: savingsTotal >= 0 ? "var(--uber-green)" : "#b91c1c" }}>
-                  ${Math.abs(savingsTotal).toFixed(2)} ({Math.abs(savingsTotalPct).toFixed(1)}%) {savingsTotal >= 0 ? "saved" : "increase"}
+                  ₹{Math.abs(savingsTotal).toFixed(2)} ({Math.abs(savingsTotalPct).toFixed(1)}%) {savingsTotal >= 0 ? "saved" : "increase"}
                 </span>
               </div>
             </div>
@@ -781,8 +781,8 @@ const straightRoutes = useMemo(() => {
                           style={{ borderTop: '1px solid rgba(0,0,0,0.04)' }}
                         >
                           <div className="flex-1 text-[#424242]">{row.employee_id}</div>
-                          <div className="w-24 text-right text-[#424242]">${Number(row.baseline_cost || 0).toFixed(2)}</div>
-                          <div className="w-24 text-right text-[#424242]">${Number(row.optimized_cost || 0).toFixed(2)}</div>
+                          <div className="w-24 text-right text-[#424242]">₹{Number(row.baseline_cost || 0).toFixed(2)}</div>
+                          <div className="w-24 text-right text-[#424242]">₹{Number(row.optimized_cost || 0).toFixed(2)}</div>
                           <div className="w-28 text-right font-medium" style={{ color: saveColor }}>{savePct}</div>
                         </div>
                       );
