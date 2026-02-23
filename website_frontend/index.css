@@ -1,0 +1,36 @@
+@import "tailwindcss";
+
+/* Uber-inspired SaaS theme (use in style={{ }} or Tailwind arbitrary values) */
+:root {
+  --uber-black: #000000;
+  --uber-gray-1: #f6f6f6;
+  --uber-gray-2: #eeeeee;
+  --uber-gray-3: #e0e0e0;
+  --uber-gray-5: #757575;
+  --uber-gray-6: #616161;
+  --uber-gray-7: #424242;
+  --uber-green: #728C69;
+  --uber-green-hover: #667e5e;
+  --radius-card: 16px;
+  --radius-pill: 9999px;
+  --radius-btn: 8px;
+  --shadow-card: 0 2px 8px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.06);
+  --shadow-float: 0 4px 20px rgba(0,0,0,0.12), 0 2px 6px rgba(0,0,0,0.08);
+  --shadow-modal: 0 24px 48px rgba(0,0,0,0.18);
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+}
+
+/* Ensure Leaflet zoom controls are above overlays and receive pointer events */
+.leaflet-container .leaflet-control {
+  z-index: 10050 !important;
+  pointer-events: auto !important;
+}
+.leaflet-top, .leaflet-bottom {
+  z-index: 10050 !important;
+}
+.leaflet-container {
+  z-index: 0;
+}
