@@ -206,7 +206,7 @@ export default function Loader() {
 
       try {
         const apiBase =
-          import.meta.env.VITE_API_BASE_URL || "http://127.0.0.1:8000";
+          import.meta.env.VITE_API_BASE_URL || "https://velora-2669-2.onrender.com";
 
         const res = await fetch(`${apiBase}/api/upload-excel/`, {
           method: "POST",
@@ -520,7 +520,7 @@ try {
         return;
       }
 
-      const apiBase = import.meta.env.VITE_API_BASE_URL || "http://127.0.0.1:8000";
+      const apiBase = import.meta.env.VITE_API_BASE_URL || "https://velora-2669-2.onrender.com";
       const nextAddedEmployees = [...addedEmployees, employeeData];
       const formDataUpload = new FormData();
       formDataUpload.append("entity_type", "employee");
@@ -581,7 +581,7 @@ try {
         return;
       }
 
-      const apiBase = import.meta.env.VITE_API_BASE_URL || "http://127.0.0.1:8000";
+      const apiBase = import.meta.env.VITE_API_BASE_URL || "https://velora-2669-2.onrender.com";
       const nextAddedVehicles = [...addedVehicles, vehicleData];
       const formDataUpload = new FormData();
       formDataUpload.append("entity_type", "vehicle");
