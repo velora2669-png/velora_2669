@@ -25,42 +25,49 @@ export default function Loader() {
       return;
     }
 
-    const uploadFile = async () => {
-      const formData = new FormData();
-      formData.append("file", file);
+  const uploadFile = async () => {
+  const formData = new FormData();
+  formData.append("file", file);
 
-      try {
-        const apiBase = import.meta.env.VITE_API_BASE_URL || "https://velora-2669-2.onrender.com";
+  try {
+    const apiBase =
+      import.meta.env.VITE_API_BASE_URL || "https://velora-2669-2.onrender.com";
 
-        const res = await fetch(`${apiBase}/api/upload-excel/`, {
-          method: "POST",
-          body: formData,
-        });
+    const res = await fetch(`${apiBase}/api/upload-excel/`, {
+      method: "POST",
+      body: formData,
+    });
 
-        const data = await res.json();
-        console.log("status:", res.status);
-        console.log("data:", data);
+    const text = await res.text();
+    let data;
 
-        if (!res.ok) {
-          throw new Error(data.error || data.message || "Upload failed");
-        }
+    try {
+      data = JSON.parse(text);
+    } catch {
+      throw new Error(`Server returned non-JSON response: ${text.slice(0, 120)}`);
+    }
 
-        setError("");
+    console.log("status:", res.status);
+    console.log("data:", data);
 
-        // The deployed backend may only respond with an upload confirmation
-        // { message, path, url } instead of the optimization result.
-        // Normalize the result so the UI can handle both cases.
-        if (data && (data.total_cost !== undefined || data.trips || data.schedule)) {
-          setResult(data);
-        } else {
-          setResult({ upload: data });
-        }
-      } catch (err) {
-        setError(err.message);
-      } finally {
-        setLoading(false);
-      }
-    };
+    if (!res.ok) {
+      throw new Error(data.error || data.message || "Upload failed");
+    }
+
+    setError(null);
+
+    if (data && (data.total_cost !== undefined || data.trips || data.schedule)) {
+      setResult(data);
+    } else {
+      setResult({ upload: data });
+    }
+  } catch (err) {
+    setError(err.message);
+    setResult(null);
+  } finally {
+    setLoading(false);
+  }
+};
 
     uploadFile();
   }, [file, navigate]);
