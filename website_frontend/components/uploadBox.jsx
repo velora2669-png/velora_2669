@@ -43,7 +43,9 @@ export default function UploadBox() {
 
       console.log("Uploading file:", file.name); // helps confirm click happened
 
-      const res = await fetch("http://127.0.0.1:8000/api/upload/", {
+      const apiBase = import.meta.env.VITE_API_BASE_URL || "http://127.0.0.1:8000";
+
+      const res = await fetch(`${apiBase}/api/upload-excel/`, {
         method: "POST",
         body: formData,
       });
@@ -54,6 +56,7 @@ export default function UploadBox() {
         throw new Error(data.error || `Upload failed (HTTP ${res.status})`);
       }
 
+      // Normalize upload-only vs optimization responses
       setServerData(data);
       setStatus("uploaded");
       setMessage(`Uploaded ✅ ${file.name}`);
