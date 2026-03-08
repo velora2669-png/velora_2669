@@ -43,14 +43,21 @@ export default function UploadBox() {
 
       console.log("Uploading file:", file.name); // helps confirm click happened
 
-      const apiBase = import.meta.env.VITE_API_BASE_URL || "http://127.0.0.1:8000";
+      const apiBase = import.meta.env.VITE_API_BASE_URL || "https://velora-2669-2.onrender.com";
 
       const res = await fetch(`${apiBase}/api/upload-excel/`, {
         method: "POST",
         body: formData,
       });
 
-      const data = await res.json().catch(() => ({}));
+      const text = await res.text();
+let data = {};
+
+try {
+  data = JSON.parse(text);
+} catch {
+  throw new Error("Server returned non-JSON response");
+}
 
       if (!res.ok) {
         throw new Error(data.error || `Upload failed (HTTP ${res.status})`);

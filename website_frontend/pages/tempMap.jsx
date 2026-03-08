@@ -206,23 +206,36 @@ export default function Loader() {
 
       try {
         const apiBase =
-          import.meta.env.VITE_API_BASE_URL || "https://velora-2669-2.onrender.com";
+          import.meta.env.VITE_API_BASE_URL || "http://127.0.0.1:8000";
 
         const res = await fetch(`${apiBase}/api/upload-excel/`, {
           method: "POST",
           body: formData,
         });
-        const data = await res.json();
+        const text = await res.text();
+let data = {};
+
+try {
+  data = JSON.parse(text);
+} catch {
+  throw new Error("Server returned non-JSON response");
+}
 
         if (!res.ok) {
           throw new Error(data.error || data.message || "Upload failed");
         }
 
-        // Normalize response: either full optimization result or upload-only confirmation
-        if (data && (data.total_cost !== undefined || data.trips || data.schedule)) {
-          setResult(data);
+        // Normalize response: supports both flat payload and {status, data} wrapper
+        const normalized =
+          data && data.data && typeof data.data === "object" ? data.data : data;
+
+        if (
+          normalized &&
+          (normalized.total_cost !== undefined || normalized.trips || normalized.schedule)
+        ) {
+          setResult(normalized);
         } else {
-          setResult({ upload: data });
+          setResult({ upload: normalized });
         }
       } catch (err) {
         setError(err.message);
@@ -331,7 +344,14 @@ export default function Loader() {
           const res = await fetch(url);
           if (!res.ok) continue;
 
-          const data = await res.json();
+          const text = await res.text();
+let data = {};
+
+try {
+  data = JSON.parse(text);
+} catch {
+  throw new Error("Server returned non-JSON response");
+}
           const coords =
             data.routes?.[0]?.geometry?.coordinates?.map(([lng, lat]) => [
               lat,
@@ -500,7 +520,7 @@ export default function Loader() {
         return;
       }
 
-      const apiBase = import.meta.env.VITE_API_BASE_URL || "https://velora-2669-2.onrender.com";
+      const apiBase = import.meta.env.VITE_API_BASE_URL || "http://127.0.0.1:8000";
       const nextAddedEmployees = [...addedEmployees, employeeData];
       const formDataUpload = new FormData();
       formDataUpload.append("entity_type", "employee");
@@ -514,7 +534,14 @@ export default function Loader() {
         body: formDataUpload,
       });
 
-      const data = await res.json();
+      const text = await res.text();
+let data = {};
+
+try {
+  data = JSON.parse(text);
+} catch {
+  throw new Error("Server returned non-JSON response");
+}
       if (res.ok && data.status === "success") {
         setResult(data.data);
         setAddedEmployees(nextAddedEmployees);
@@ -554,7 +581,7 @@ export default function Loader() {
         return;
       }
 
-      const apiBase = import.meta.env.VITE_API_BASE_URL || "https://velora-2669-2.onrender.com";
+      const apiBase = import.meta.env.VITE_API_BASE_URL || "http://127.0.0.1:8000";
       const nextAddedVehicles = [...addedVehicles, vehicleData];
       const formDataUpload = new FormData();
       formDataUpload.append("entity_type", "vehicle");
@@ -568,7 +595,14 @@ export default function Loader() {
         body: formDataUpload,
       });
 
-      const data = await res.json();
+      const text = await res.text();
+let data = {};
+
+try {
+  data = JSON.parse(text);
+} catch {
+  throw new Error("Server returned non-JSON response");
+}
       if (res.ok && data.status === "success") {
         setResult(data.data);
         setAddedVehicles(nextAddedVehicles);

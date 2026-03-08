@@ -213,16 +213,29 @@ export default function Loader() {
           body: formData,
         });
 
-        const data = await res.json();
+        const text = await res.text();
+let data = {};
+
+try {
+  data = JSON.parse(text);
+} catch {
+  throw new Error("Server returned non-JSON response");
+}
 
         if (!res.ok) {
           throw new Error(data.error || data.message || "Upload failed");
         }
 
-        if (data && (data.total_cost !== undefined || data.trips || data.schedule)) {
-          setResult(data);
+        const normalized =
+          data && data.data && typeof data.data === "object" ? data.data : data;
+
+        if (
+          normalized &&
+          (normalized.total_cost !== undefined || normalized.trips || normalized.schedule)
+        ) {
+          setResult(normalized);
         } else {
-          setResult({ upload: data });
+          setResult({ upload: normalized });
         }
       } catch (err) {
         setError(err.message);
@@ -564,7 +577,14 @@ const straightRoutes = useMemo(() => {
         body: formDataUpload,
       });
 
-      const data = await res.json();
+      const text = await res.text();
+let data = {};
+
+try {
+  data = JSON.parse(text);
+} catch {
+  throw new Error("Server returned non-JSON response");
+}
       if (res.ok && data.status === "success") {
         setResult(data.data);
         setAddedEmployees(nextAddedEmployees);
@@ -618,7 +638,14 @@ const straightRoutes = useMemo(() => {
         body: formDataUpload,
       });
 
-      const data = await res.json();
+      const text = await res.text();
+let data = {};
+
+try {
+  data = JSON.parse(text);
+} catch {
+  throw new Error("Server returned non-JSON response");
+}
       if (res.ok && data.status === "success") {
         setResult(data.data);
         setAddedVehicles(nextAddedVehicles);

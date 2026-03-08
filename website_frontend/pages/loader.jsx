@@ -56,10 +56,16 @@ export default function Loader() {
 
     setError(null);
 
-    if (data && (data.total_cost !== undefined || data.trips || data.schedule)) {
-      setResult(data);
+    const normalized =
+      data && data.data && typeof data.data === "object" ? data.data : data;
+
+    if (
+      normalized &&
+      (normalized.total_cost !== undefined || normalized.trips || normalized.schedule)
+    ) {
+      setResult(normalized);
     } else {
-      setResult({ upload: data });
+      setResult({ upload: normalized });
     }
   } catch (err) {
     setError(err.message);
