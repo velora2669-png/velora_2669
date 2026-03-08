@@ -206,19 +206,23 @@ export default function Loader() {
 
       try {
         const apiBase =
-          import.meta.env.VITE_API_BASE_URL || "http://localhost:8000";
+          import.meta.env.VITE_API_BASE_URL || "https://velora-2669-2.onrender.com";
 
-        const res = await fetch(`${apiBase}/api/upload/`, {
+        const res = await fetch(`${apiBase}/api/upload-excel/`, {
           method: "POST",
           body: formData,
         });
-
         const data = await res.json();
 
-        if (res.ok && data.status === "success") {
-          setResult(data.data);
+        if (!res.ok) {
+          throw new Error(data.error || data.message || "Upload failed");
+        }
+
+        // Normalize response: either full optimization result or upload-only confirmation
+        if (data && (data.total_cost !== undefined || data.trips || data.schedule)) {
+          setResult(data);
         } else {
-          throw new Error(data.message || "Optimization failed");
+          setResult({ upload: data });
         }
       } catch (err) {
         setError(err.message);
@@ -496,7 +500,7 @@ export default function Loader() {
         return;
       }
 
-      const apiBase = import.meta.env.VITE_API_BASE_URL || "http://localhost:8000";
+      const apiBase = import.meta.env.VITE_API_BASE_URL || "https://velora-2669-2.onrender.com";
       const nextAddedEmployees = [...addedEmployees, employeeData];
       const formDataUpload = new FormData();
       formDataUpload.append("entity_type", "employee");
@@ -550,7 +554,7 @@ export default function Loader() {
         return;
       }
 
-      const apiBase = import.meta.env.VITE_API_BASE_URL || "http://localhost:8000";
+      const apiBase = import.meta.env.VITE_API_BASE_URL || "https://velora-2669-2.onrender.com";
       const nextAddedVehicles = [...addedVehicles, vehicleData];
       const formDataUpload = new FormData();
       formDataUpload.append("entity_type", "vehicle");
